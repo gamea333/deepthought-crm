@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
@@ -22,8 +23,10 @@ The person doing this needs to be dedicated to it. Arjun can't do it — he's in
 If we get this right, I can finally step back from the day-to-day. I want to focus on strategy — the aerospace play, the European certifications. But right now I'm chasing production schedules and quoting approvals. That's not where I should be spending my time.`;
 
 export default function Extract() {
+  const navigate = useNavigate();
   const [transcript, setTranscript] = useState('');
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [extractedData, setExtractedData] = useState(null);
   const [savedAccountId, setSavedAccountId] = useState(null);
   const [error, setError] = useState('');
@@ -44,6 +47,27 @@ export default function Extract() {
       setError(err.response?.data?.error || err.message || 'Extraction failed');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError('');
+    try {
+      const { data } = await axios.post(
+        `${API_BASE}/api/accounts/from-extraction`,
+        extractedData
+      );
+      if (data.success) {
+        setSavedAccountId(data.accountId);
+        navigate(`/charter/${data.accountId}`);
+      } else {
+        setError(data.error || 'Save failed');
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || err.message || 'Save failed');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -111,6 +135,16 @@ export default function Extract() {
                 ))}
             </tbody>
           </table>
+
+          <button
+            type="button"
+            className="btn-primary"
+            style={{ marginTop: '20px' }}
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saving ? 'Saving...' : 'Save and Generate Charter'}
+          </button>
         </div>
       )}
     </div>
