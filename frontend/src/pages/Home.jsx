@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
@@ -46,7 +46,7 @@ export default function Home() {
     <div className="home-container">
       <h1>DeepThought — Growth Charter CRM</h1>
 
-      <div style={{ marginBottom: '24px' }}>
+      <div style={{ marginBottom: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
         <button
           type="button"
           className="btn-primary"
@@ -55,6 +55,9 @@ export default function Home() {
         >
           {seeding ? 'Seeding...' : 'Seed Sample Data'}
         </button>
+        <Link to="/extract" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
+          Extract from Transcript
+        </Link>
         {seedMessage && (
           <p style={{ color: 'green', marginTop: '12px' }}>{seedMessage}</p>
         )}
