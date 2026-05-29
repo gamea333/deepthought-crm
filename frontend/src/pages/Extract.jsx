@@ -22,6 +22,12 @@ The person doing this needs to be dedicated to it. Arjun can't do it — he's in
 
 If we get this right, I can finally step back from the day-to-day. I want to focus on strategy — the aerospace play, the European certifications. But right now I'm chasing production schedules and quoting approvals. That's not where I should be spending my time.`;
 
+function valueSignalClass(value) {
+  if (value <= 3) return 'value-signal-strong';
+  if (value <= 6) return 'value-signal-mid';
+  return 'value-signal-weak';
+}
+
 export default function Extract() {
   const navigate = useNavigate();
   const [transcript, setTranscript] = useState('');
@@ -60,7 +66,7 @@ export default function Extract() {
       );
       if (data.success) {
         setSavedAccountId(data.accountId);
-        navigate(`/charter/${data.accountId}`);
+        navigate(`/charter/${data.accountId}`, { state: { fromExtract: true } });
       } else {
         setError(data.error || 'Save failed');
       }
@@ -71,49 +77,90 @@ export default function Extract() {
     }
   };
 
+  const resetExtract = () => {
+    setTranscript('');
+    setExtractedData(null);
+    setSavedAccountId(null);
+    setError('');
+  };
+
   return (
     <div className="extract-container">
-      <h1>Extract Nodes from Transcript</h1>
-      <p>
+      <h1 className="page-title">Extract Nodes from Transcript</h1>
+      <p className="page-subtitle">
         Paste a founder conversation transcript below. The AI will classify it
         into CRM nodes and generate a Growth Charter.
       </p>
 
-      <textarea
-        value={transcript}
-        onChange={(e) => setTranscript(e.target.value)}
-        placeholder="Paste transcript here..."
-      />
+      <div className="extract-layout">
+        <div className="extract-main">
+          <textarea
+            value={transcript}
+            onChange={(e) => setTranscript(e.target.value)}
+            placeholder="Paste transcript here..."
+          />
+          <p className="char-counter">{transcript.length} characters</p>
 
-      <div style={{ marginTop: '12px', marginBottom: '16px' }}>
-        <button
-          type="button"
-          className="btn-primary"
-          onClick={() => setTranscript(SAMPLE_TRANSCRIPT)}
-        >
-          Load Sample Transcript
-        </button>
+          <div className="extract-actions">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => setTranscript(SAMPLE_TRANSCRIPT)}
+            >
+              Load Sample Transcript
+            </button>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleExtract}
+              disabled={loading || !transcript.trim()}
+            >
+              Extract Nodes
+            </button>
+          </div>
+
+          {loading && (
+            <div className="loading-block extract-loading">
+              <div className="spinner" aria-label="Extracting" />
+              <p>
+                Analyzing transcript with Gemini AI... this may take 15-30
+                seconds
+              </p>
+            </div>
+          )}
+          {error && <div className="error-msg">{error}</div>}
+        </div>
+
+        <aside className="extract-tips no-print">
+          <h3>What the AI extracts</h3>
+          <ul>
+            <li>
+              <strong>D1–D3, D7</strong> — Growth ambition, KPI clarity, and
+              founder outcomes
+            </li>
+            <li>
+              <strong>I3, I9, I12</strong> — Ownership, prior attempts, and
+              intervention type
+            </li>
+            <li>
+              <strong>K1, F2, C7</strong> — Decision-maker profile, revenue
+              scale, and systems maturity
+            </li>
+          </ul>
+          <p className="extract-tips-note">
+            Each node is scored 1–8 against DeepThought&apos;s render map. Review
+            values before saving to generate the charter.
+          </p>
+        </aside>
       </div>
 
-      <button
-        type="button"
-        className="btn-primary"
-        onClick={handleExtract}
-        disabled={loading || !transcript.trim()}
-      >
-        Extract Nodes
-      </button>
-
-      {loading && <p style={{ marginTop: '16px' }}>Extracting nodes with AI...</p>}
-      {error && <div className="error-msg">{error}</div>}
-
       {extractedData && (
-        <div style={{ marginTop: '32px' }}>
+        <div className="extract-review">
           <h2>Extracted Node Values — Review Before Saving</h2>
           <p>
             <strong>{extractedData.account?.companyName}</strong>
           </p>
-          <p style={{ color: '#555' }}>{extractedData.account?.businessDescription}</p>
+          <p className="review-desc">{extractedData.account?.businessDescription}</p>
 
           <table className="node-review-table">
             <thead>
@@ -129,24 +176,35 @@ export default function Extract() {
                 .map(([nodeId, node]) => (
                   <tr key={nodeId}>
                     <td>{nodeId}</td>
-                    <td>{node.value}</td>
+                    <td>
+                      <span
+                        className={`value-badge ${valueSignalClass(node.value)}`}
+                      >
+                        {node.value}
+                      </span>
+                    </td>
                     <td>{node.evidence}</td>
                   </tr>
                 ))}
             </tbody>
           </table>
 
-          <button
-            type="button"
-            className="btn-primary"
-            style={{ marginTop: '20px' }}
-            onClick={handleSave}
-            disabled={saving}
-          >
-            {saving ? 'Saving...' : 'Save and Generate Charter'}
-          </button>
+          <div className="extract-review-actions">
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? 'Saving...' : 'Save and Generate Charter'}
+            </button>
+            <button type="button" className="btn-text" onClick={resetExtract}>
+              ← Extract Another
+            </button>
+          </div>
         </div>
       )}
+
     </div>
   );
 }

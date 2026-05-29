@@ -96,6 +96,7 @@ INSTRUCTIONS:
 - If a node cannot be determined, set value to null and note "not surfaced"
 - For K1, F2, and C7, also extract companion field data
 - For D2, extract currentValue and targetValue if mentioned
+- Return ONLY a valid JSON object. No markdown, no code fences, no explanation text, no thinking text. Just the raw JSON.
 
 OUTPUT FORMAT (respond with valid JSON only, no other text, no markdown code fences):
 {
@@ -120,6 +121,114 @@ OUTPUT FORMAT (respond with valid JSON only, no other text, no markdown code fen
 TRANSCRIPT:
 {{TRANSCRIPT}}`;
 
+const MAX_GEMINI_ATTEMPTS = 3;
+const GEMINI_RETRY_DELAY_MS = 15000;
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Extract JSON from text that may contain thinking output or extra text
+function extractJSON(text) {
+  if (!text) return null;
+
+  // First try direct parse
+  try {
+    return JSON.parse(text.trim());
+  } catch {}
+
+  // Strip markdown fences
+  let cleaned = text
+    .replace(/```json/gi, '')
+    .replace(/```/g, '')
+    .trim();
+
+  try {
+    return JSON.parse(cleaned);
+  } catch {}
+
+  // Find the first { and last } and extract everything between
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    const jsonSlice = cleaned.slice(firstBrace, lastBrace + 1);
+    try {
+      return JSON.parse(jsonSlice);
+    } catch {}
+  }
+
+  return null;
+}
+
+async function callGeminiApi(fullPrompt, apiKey) {
+  // Use gemini-2.5-flash with thinking disabled
+  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+  const requestBody = {
+    contents: [{ parts: [{ text: fullPrompt }] }],
+    generationConfig: {
+      maxOutputTokens: 8192,
+      temperature: 0.1,
+    },
+  };
+
+  for (let attempt = 1; attempt <= MAX_GEMINI_ATTEMPTS; attempt++) {
+    console.log(`Gemini attempt ${attempt} of ${MAX_GEMINI_ATTEMPTS}...`);
+
+    let response;
+    try {
+      response = await fetch(geminiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+    } catch (networkErr) {
+      console.error('Network error calling Gemini:', networkErr.message);
+      if (attempt < MAX_GEMINI_ATTEMPTS) {
+        await sleep(GEMINI_RETRY_DELAY_MS);
+        continue;
+      }
+      return { ok: false, status: 500, error: 'Network error reaching Gemini API' };
+    }
+
+    console.log(`Gemini response status: ${response.status}`);
+
+    if (response.status === 429) {
+      console.log(`Rate limited. Waiting ${GEMINI_RETRY_DELAY_MS / 1000}s before retry...`);
+      if (attempt < MAX_GEMINI_ATTEMPTS) {
+        await sleep(GEMINI_RETRY_DELAY_MS);
+        continue;
+      }
+      return {
+        ok: false,
+        status: 429,
+        error: 'Gemini API rate limit reached. Please wait 1 minute and try again.',
+      };
+    }
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      console.error('Gemini error body:', errBody);
+      return {
+        ok: false,
+        status: response.status,
+        error: `Gemini API error: ${response.status}`,
+        raw: errBody,
+      };
+    }
+
+    const result = await response.json();
+    console.log('Gemini raw result:', JSON.stringify(result, null, 2));
+    return { ok: true, result };
+  }
+
+  return {
+    ok: false,
+    status: 429,
+    error: 'Gemini API rate limit reached after all retries. Please wait 1 minute and try again.',
+  };
+}
+
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -134,46 +243,50 @@ router.post('/', async (req, res) => {
       return res.status(500).json({ success: false, error: 'GEMINI_API_KEY is not configured' });
     }
 
+    console.log('Starting Gemini extraction...');
     const fullPrompt = PROMPT_TEMPLATE.replace('{{TRANSCRIPT}}', transcript);
+    const geminiResult = await callGeminiApi(fullPrompt, process.env.GEMINI_API_KEY);
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
-
-    const response = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
-      }),
-    });
-
-    if (!response.ok) {
-      const errBody = await response.text();
-      return res.status(response.status).json({
+    if (!geminiResult.ok) {
+      return res.status(geminiResult.status || 500).json({
         success: false,
-        error: `Gemini API error: ${response.status}`,
-        raw: errBody,
+        error: geminiResult.error,
+        ...(geminiResult.raw && { raw: geminiResult.raw }),
       });
     }
 
-    const result = await response.json();
-    let text = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Handle gemini-2.5-flash response structure
+    // It may return multiple parts including thought parts — get all text parts
+    const parts = geminiResult.result.candidates?.[0]?.content?.parts || [];
+    console.log('Number of parts in response:', parts.length);
 
-    text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+    // Filter out thought parts, keep only text parts
+    const textParts = parts.filter(p => p.text && !p.thought);
+    const rawText = textParts.map(p => p.text).join('').trim();
 
-    try {
-      const parsedJSON = JSON.parse(text);
-      return res.json({ success: true, data: parsedJSON });
-    } catch {
+    console.log('Raw text from Gemini (first 300 chars):', rawText.substring(0, 300));
+
+    const parsedJSON = extractJSON(rawText);
+
+    if (!parsedJSON) {
+      console.error('Failed to parse JSON. Full raw text:', rawText);
       return res.json({
         success: false,
         error: 'LLM returned unparseable output',
-        raw: text,
+        raw: rawText,
       });
     }
+
+    console.log('Successfully parsed JSON. Company:', parsedJSON.account?.companyName);
+    return res.json({ success: true, data: parsedJSON });
+
   } catch (err) {
+    console.error('Extract route error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
+// ─── Save extracted nodes to MongoDB ────────────────────────────────────────
 
 const NODE_NAMES = {
   D1: 'KPI Selection',
@@ -199,6 +312,7 @@ fromExtractionRouter.post('/from-extraction', async (req, res) => {
     }
 
     const createdAccount = await Account.create(account);
+    console.log('Created account:', createdAccount._id, createdAccount.companyName);
 
     for (const [nodeId, nodeData] of Object.entries(nodes)) {
       if (nodeData == null || nodeData.value == null) continue;
@@ -217,8 +331,11 @@ fromExtractionRouter.post('/from-extraction', async (req, res) => {
       });
     }
 
+    console.log('All nodes saved for account:', createdAccount._id);
     res.json({ success: true, accountId: createdAccount._id });
+
   } catch (err) {
+    console.error('from-extraction error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
