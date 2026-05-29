@@ -82,6 +82,37 @@ export default function Extract() {
 
       {loading && <p style={{ marginTop: '16px' }}>Extracting nodes with AI...</p>}
       {error && <div className="error-msg">{error}</div>}
+
+      {extractedData && (
+        <div style={{ marginTop: '32px' }}>
+          <h2>Extracted Node Values — Review Before Saving</h2>
+          <p>
+            <strong>{extractedData.account?.companyName}</strong>
+          </p>
+          <p style={{ color: '#555' }}>{extractedData.account?.businessDescription}</p>
+
+          <table className="node-review-table">
+            <thead>
+              <tr>
+                <th>Node</th>
+                <th>Value</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(extractedData.nodes || {})
+                .filter(([, node]) => node != null && node.value != null)
+                .map(([nodeId, node]) => (
+                  <tr key={nodeId}>
+                    <td>{nodeId}</td>
+                    <td>{node.value}</td>
+                    <td>{node.evidence}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
