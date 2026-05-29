@@ -1,0 +1,103 @@
+body {
+  font-family: Georgia, serif;
+  background: #f5f5f0;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 0;
+}
+
+.charter-container {
+  max-width: 860px;
+  margin: 40px auto;
+  background: white;
+  padding: 48px 56px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.charter-container h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #1a1a1a;
+  padding-bottom: 8px;
+}
+
+.charter-container h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  color: #1a1a1a;
+}
+
+.charter-container h3 {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  color: #333;
+}
+
+.charter-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.charter-container td,
+.charter-container th {
+  border: 1px solid #ddd;
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.charter-container th {
+  background: #f5f5f0;
+  font-weight: bold;
+}
+
+.charter-container hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 2rem 0;
+}
+
+.charter-container em {
+  color: #555;
+}
+
+.home-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.account-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-primary {
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: #333;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+a {
+  color: #1a1a1a;
+}
