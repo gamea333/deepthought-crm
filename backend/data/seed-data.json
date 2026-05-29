@@ -1,0 +1,114 @@
+{
+  "account": {
+    "companyName": "Sureflow Formulations",
+    "businessDescription": "pharmaceutical formulations manufacturer specializing in APIs and intermediates for the domestic market"
+  },
+  "nodes": [
+    {
+      "nodeId": "K1",
+      "name": "Decision-Maker Identification",
+      "value": 3,
+      "companion": {
+        "name": "Rajesh Kapoor",
+        "title": "Managing Director",
+        "background": "M.Pharm, MBA (XLRI), 22 years in pharma manufacturing"
+      },
+      "scoredBy": "research-analyst"
+    },
+    {
+      "nodeId": "F2",
+      "name": "Revenue Scale",
+      "value": 4,
+      "companion": {
+        "actualRevenue": "₹85 Crore",
+        "revenueSource": "founder-stated"
+      },
+      "scoredBy": "research-analyst"
+    },
+    {
+      "nodeId": "C7",
+      "name": "Systems Maturity",
+      "value": 5,
+      "companion": {
+        "systemsInUse": "Tally for accounting, Excel for production planning, WhatsApp for coordination"
+      },
+      "scoredBy": "research-analyst"
+    },
+    {
+      "nodeId": "D1",
+      "name": "KPI Selection",
+      "value": 1,
+      "verbatim": {
+        "quote": "The thing I want to fix is leads. We get maybe 12 qualified inquiries a month.",
+        "interpretation": "Pipeline volume is the identified bottleneck — founder sees lead generation as the highest-leverage KPI"
+      },
+      "scoredBy": "closer"
+    },
+    {
+      "nodeId": "D2",
+      "name": "A-to-B Clarity",
+      "value": 4,
+      "companion": {
+        "primaryMetric": "Qualified leads per month",
+        "currentValue": "~12 qualified leads/month (sales team estimate)",
+        "targetValue": "30 qualified leads/month",
+        "measurementMethod": "Sales team count — no CRM tracking"
+      },
+      "verbatim": {
+        "quote": "We get maybe 12 qualified inquiries a month... I want to get to 30 per month.",
+        "interpretation": "Baseline is approximate (felt, not tracked), target is precise"
+      },
+      "scoredBy": "closer"
+    },
+    {
+      "nodeId": "D3",
+      "name": "Business Unlock",
+      "value": 1,
+      "verbatim": {
+        "quote": "If we cross 100 crore, everything changes. We become visible to institutional buyers.",
+        "interpretation": "Revenue milestone unlock — ₹100Cr is the threshold that changes competitive positioning"
+      },
+      "scoredBy": "closer"
+    },
+    {
+      "nodeId": "D7",
+      "name": "Founder Outcome",
+      "value": 2,
+      "verbatim": {
+        "quote": "I want this business to run without me in every room. Right now if I take a week off, the pipeline stops.",
+        "interpretation": "Founder seeks operational independence — the business must function without the founder's constant presence"
+      },
+      "scoredBy": "closer"
+    },
+    {
+      "nodeId": "I3",
+      "name": "Improvement Ownership",
+      "value": 8,
+      "verbatim": {
+        "quote": "My sales head, Priya, she's the one who should be driving this. But she's buried.",
+        "interpretation": "The right owner is identified but has no protected bandwidth — routine operations consume all improvement capacity"
+      },
+      "scoredBy": "closer"
+    },
+    {
+      "nodeId": "I9",
+      "name": "Prior Attempt Learning",
+      "value": 2,
+      "verbatim": {
+        "quote": "The problem wasn't the campaigns — we didn't have a method. We just threw money at it and hoped.",
+        "interpretation": "Previous failure was structural (no method) not resource-based — founder has correct diagnosis"
+      },
+      "scoredBy": "closer"
+    },
+    {
+      "nodeId": "I12",
+      "name": "Intervention Type",
+      "value": 6,
+      "verbatim": {
+        "quote": "There's no designed process for lead generation. It's all ad-hoc.",
+        "interpretation": "No process exists — needs to be built from scratch, not optimized or repaired"
+      },
+      "scoredBy": "closer"
+    }
+  ]
+}
