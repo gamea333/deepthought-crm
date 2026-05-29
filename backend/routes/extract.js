@@ -1,4 +1,6 @@
 const express = require('express');
+const Account = require('../models/Account');
+const Node = require('../models/Node');
 
 const PROMPT_TEMPLATE = `You are a CRM analyst for DeepThought, a B2B consulting company that helps manufacturing MSMEs grow. Given a conversation transcript with a company founder, extract values for the following CRM nodes. Each node has 8 possible options — pick the one that best matches what the founder described.
 
@@ -173,4 +175,53 @@ router.post('/', async (req, res) => {
   }
 });
 
+const NODE_NAMES = {
+  D1: 'KPI Selection',
+  D2: 'A-to-B Clarity',
+  D3: 'Business Unlock',
+  D7: 'Founder Outcome',
+  I3: 'Improvement Ownership',
+  I9: 'Prior Attempt Learning',
+  I12: 'Intervention Type',
+  K1: 'Decision-Maker Identification',
+  F2: 'Revenue Scale',
+  C7: 'Systems Maturity',
+};
+
+const fromExtractionRouter = express.Router();
+
+fromExtractionRouter.post('/from-extraction', async (req, res) => {
+  try {
+    const { account, nodes } = req.body;
+
+    if (!account || !nodes) {
+      return res.status(400).json({ success: false, error: 'account and nodes are required' });
+    }
+
+    const createdAccount = await Account.create(account);
+
+    for (const [nodeId, nodeData] of Object.entries(nodes)) {
+      if (nodeData == null || nodeData.value == null) continue;
+
+      await Node.create({
+        accountId: createdAccount._id,
+        nodeId,
+        name: NODE_NAMES[nodeId] || nodeId,
+        value: nodeData.value,
+        companion: nodeData.companion || {},
+        verbatim: {
+          quote: nodeData.evidence || '',
+          interpretation: '',
+        },
+        scoredBy: 'gemini-extraction',
+      });
+    }
+
+    res.json({ success: true, accountId: createdAccount._id });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 module.exports = router;
+module.exports.fromExtractionRouter = fromExtractionRouter;

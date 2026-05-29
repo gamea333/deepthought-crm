@@ -6,6 +6,7 @@ const cors = require('cors');
 const seedRouter = require('./routes/seed');
 const accountsRouter = require('./routes/accounts');
 const extractRouter = require('./routes/extract');
+const { fromExtractionRouter } = require('./routes/extract');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/seed', seedRouter);
+app.use('/api/accounts', fromExtractionRouter);
 app.use('/api/accounts', accountsRouter);
 app.use('/api/extract', extractRouter);
 
