@@ -101,3 +101,21 @@ body {
 a {
   color: #1a1a1a;
 }
+
+.extract-container {
+  max-width: 860px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.extract-container textarea {
+  width: 100%;
+  min-height: 300px;
+  font-family: monospace;
+  font-size: 13px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  resize: vertical;
+}
