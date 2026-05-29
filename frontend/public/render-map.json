@@ -1,0 +1,102 @@
+{
+  "D1": {
+    "1": "pipeline generation — increasing the volume of qualified leads entering the sales funnel",
+    "2": "conversion optimization — improving the rate at which existing leads become paying customers",
+    "3": "revenue deepening — growing wallet share from the existing customer base through upselling",
+    "4": "portfolio expansion — introducing new offerings to existing customers through cross-selling",
+    "5": "customer retention — strengthening satisfaction and loyalty to reduce churn and increase lifetime value",
+    "6": "speed of delivery — reducing turnaround time to serve more customers with the same capacity",
+    "7": "quality and compliance — elevating product standards and regulatory adherence to protect market access",
+    "8": "margin improvement — reducing operational waste to increase profitability without growing revenue"
+  },
+  "D2": {
+    "1": "Both the current state and target are precise — the company tracks this KPI rigorously and has a data-backed target",
+    "2": "The current state is measured, and the target is a stretch goal based on the founder's growth ambition",
+    "3": "The current state is measured, and the target is defined by what the market demands to remain competitive",
+    "4": "The gap between today and the target is felt but not tracked rigorously — the target is clear, the baseline is approximate",
+    "5": "Both current and target are approximate — the company has a range, not a number",
+    "6": "The current state is known, but the target depends on what turns out to be realistic once execution begins",
+    "7": "The target is defined from peer benchmarks — the current state is where the company falls short of the industry",
+    "8": "This is the first time putting a number on this — the gap was always felt but never quantified"
+  },
+  "D3": {
+    "1": "Revenue crosses the next major milestone — ₹50Cr, ₹100Cr, or ₹200Cr — a threshold that changes the company's competitive position",
+    "2": "The growth model starts compounding — not just linear revenue addition but multiplicative gains across the business",
+    "3": "A new market or geography becomes viable — the KPI improvement unlocks expansion that was previously out of reach",
+    "4": "The business becomes investable or exit-ready — the improvement makes the company attractive for institutional capital or acquisition",
+    "5": "Profitability step-changes — growth starts paying for itself instead of consuming cash",
+    "6": "The team scales — a leadership layer emerges below the founder, creating organizational capacity",
+    "7": "Competitive position locks in — the window of opportunity closes in the company's favor",
+    "8": "The business becomes what the founder originally envisioned when they started the company"
+  },
+  "D7": {
+    "1": "The founder focuses on vision and strategy — no longer chasing daily execution across every function",
+    "2": "The business runs without the founder in every room — operational independence from the founder's constant presence",
+    "3": "The founder's best people grow into the leaders they need — the next generation of management emerges",
+    "4": "The founder proves the company can compound — not just grow year to year but build durable momentum",
+    "5": "The founder creates something worth more than their time in it — the company's value transcends the founder's operational involvement",
+    "6": "The founder builds the leadership layer they've been wanting — delegation becomes real, not theoretical",
+    "7": "The founder builds what they set out to build when they started the company — the original vision comes to life",
+    "8": "The founder enjoys running this business again — it becomes energizing, not draining"
+  },
+  "I3": {
+    "1": "A dedicated person with no other responsibilities — singular focus on driving this KPI",
+    "2": "A senior leader is carving out time for it — capable but splitting attention with other priorities",
+    "3": "The founder will drive it personally — with a system supporting them rather than carrying the load alone",
+    "4": "A small team focused only on improvement — a dedicated unit that doesn't get pulled into operations",
+    "5": "Each department head owns their piece — distributed ownership with coordination needed",
+    "6": "Someone from outside brings structure — external capability to design what the organization can't build alone",
+    "7": "The right person doesn't exist in the organization yet — the role needs to be created or hired for",
+    "8": "The founder knows who should drive it, but that person is buried in day-to-day operations — their time is consumed by routine delivery, leaving no bandwidth for systematic improvement"
+  },
+  "I9": {
+    "1": "Previous attempts needed a dedicated person — not someone splitting time with routine operations",
+    "2": "Previous attempts lacked a method — there was intent and energy but no structured, repeatable approach",
+    "3": "Previous attempts ran too long without checkpoints — by the time failure was visible, months of effort were wasted",
+    "4": "Previous attempts needed external structure — the organization couldn't build the framework on its own",
+    "5": "Previous attempts lacked the founder's involvement in reviews — delegation without oversight led to drift",
+    "6": "Previous attempts started too large — the next attempt should prove the concept small before expanding",
+    "7": "Previous attempts tracked outcomes but not activities — the work wasn't visible until results appeared",
+    "8": "This is the first real attempt — no prior failure to learn from"
+  },
+  "I12": {
+    "1": "The process works, it just needs technology to go faster — the logic stays the same, manual steps get automated",
+    "2": "The process works but manual bottlenecks slow it down — technology replaces specific manual steps without changing process design",
+    "3": "The process exists but isn't delivering results — specific steps need diagnosis and redesign",
+    "4": "The process was designed for a different scale — what worked at ₹50Cr is breaking at ₹200Cr",
+    "5": "Parts of the process exist, other parts are missing — the gaps need to be built, not the whole system",
+    "6": "No designed process exists for this function — it's ad-hoc, relationship-driven, or founder-dependent",
+    "7": "The process has been improved before and hit a ceiling — a fundamentally different approach is needed",
+    "8": "This function doesn't exist in the company — it's being built from scratch"
+  },
+  "F2": {
+    "1": "₹500 Crore+ annual revenue — large mid-market enterprise",
+    "2": "₹200–500 Crore annual revenue — upper mid-market, established operations",
+    "3": "₹100–200 Crore annual revenue — scaling rapidly",
+    "4": "₹50–100 Crore annual revenue — proven business model with room to grow",
+    "5": "₹25–50 Crore annual revenue — emerging business with growth potential",
+    "6": "₹10–25 Crore annual revenue — early stage, founder-driven",
+    "7": "Below ₹10 Crore annual revenue — early-stage venture",
+    "8": "Revenue not disclosed"
+  },
+  "C7": {
+    "1": "ERP fully implemented and integrated across departments — real-time dashboards, structured costing, data-driven decisions",
+    "2": "ERP implemented in core functions — structured costing exists, some manual gaps remain",
+    "3": "ERP implemented but partially adopted — some functions on the system, others still on Excel or manual processes",
+    "4": "No ERP, but structured processes exist — formal SOPs, costing models, and disciplined tracking through spreadsheets",
+    "5": "Digital tools adopted piecemeal — accounting software, spreadsheets for planning, messaging apps for coordination, but no integration",
+    "6": "Systems investment planned or in progress — the company recognizes the need and has begun implementation",
+    "7": "Operations run on the founder's memory and informal coordination — no structured tracking or documentation",
+    "8": "Actively resistant to systems — leadership does not see value in structured operational tools"
+  },
+  "K1": {
+    "1": "Direct relationship established — the decision-maker is engaged and actively participating in conversations",
+    "2": "Decision-maker identified and contacted — responsive, scheduling or in early conversation",
+    "3": "Decision-maker fully profiled from research — name, title, and background known, not yet contacted",
+    "4": "Decision-maker identified by name and role — basic profile known, background unclear",
+    "5": "Decision-maker role known but specific person uncertain — multiple candidates",
+    "6": "Decision-maker contacted through an intermediary — not reached directly",
+    "7": "Decision-maker identified but access is gated — an assistant or family member screens all contact",
+    "8": "Decision-maker not identified — company structure unclear"
+  }
+}
